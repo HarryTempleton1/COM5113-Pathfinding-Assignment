@@ -27,10 +27,8 @@ namespace Assignment__fixed
             }
             //creates coordinate history linked list to store previous player positions for undo function
             var history = new LinkedList<Coordinate>();
-
-            //creates open and closed lists to store cooardinates for search algorithms
-            var openList = new LinkedQueue<Coordinate>();
-            var closedList = new LinkedList<Coordinate>();
+            //stores the path for searches
+            LinkedList<Coordinate> path = new LinkedList<Coordinate>();
 
             //creates obstacles at random points on the grid
             Random rnd = new Random();
@@ -42,17 +40,17 @@ namespace Assignment__fixed
             grid[rnd.Next(dim), rnd.Next(dim)] = "E";
             grid[mid, mid] = "P";
 
-            // Use Coordinate to hold the player's position (row, col)
+            
             Coordinate player = new Coordinate(mid, mid);
             draw(grid, dim);
-            BreadthFirstSearch.BFS(grid, dim, openList, closedList, player);
+            //BreadthFirstSearch.BFS(grid, dim, player);
 
             //main game loop
             while (!gameOver)
             {
                 //displays grid and instructions
                 Console.Clear();
-                Console.WriteLine("Press Q to quit, Backspace to undo, P to BFS and WASD to move");
+                Console.WriteLine("Press Q to quit, Backspace to undo, P to BFS, O to DFS and WASD to move");
                 Console.WriteLine("Player Moves: " + moves);
                 draw(grid, dim);
 
@@ -95,7 +93,15 @@ namespace Assignment__fixed
                 }
                 if (inp1.Key == ConsoleKey.P)
                 {
-                    BreadthFirstSearch.BFS(grid,dim,openList,closedList,player);
+                    SearchNode playerNode = new SearchNode(player);
+                    BreadthFirstSearch.BFS(grid, dim, playerNode, ref path);
+                    Console.WriteLine("Press any key to continue");
+                    Console.ReadKey();
+                }
+                if (inp1.Key == ConsoleKey.O)
+                {
+                    SearchNode playerNode = new SearchNode(player);
+                    DepthFirstSearch.DFS(grid, dim, playerNode, ref path);
                     Console.WriteLine("Press any key to continue");
                     Console.ReadKey();
                 }

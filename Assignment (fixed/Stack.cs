@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Assignment__fixed
 {
-    internal class Stack<T> : LinkedList<T>
+    internal class Stack<T> : IStack<T>
     {
         private readonly LinkedList<T> _list = new LinkedList<T>();
         public Stack()
@@ -19,9 +19,16 @@ namespace Assignment__fixed
             _list.PushFront(data);
         }
 
-        public void PopStack()
+        public bool PopStack(ref T data)
         {
+            bool result = _list.GetFront(ref data);
             _list.PopFront();
+            return result;
+        }
+
+        public bool IsEmpty()
+        {
+            return _list.IsEmpty();
         }
     }
 }

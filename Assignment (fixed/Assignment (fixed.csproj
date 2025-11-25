@@ -47,6 +47,9 @@
     <Compile Include="BreadthFirstSearch.cs" />
     <Compile Include="DepthFirstSearch.cs" />
     <Compile Include="Coordinate.cs" />
+    <Compile Include="IStack.cs" />
+    <Compile Include="PathFinderFactory.cs" />
+    <Compile Include="PathFinderInterface.cs" />
     <Compile Include="PathNode.cs" />
     <Compile Include="IQueue.cs" />
     <Compile Include="Ops.cs" />

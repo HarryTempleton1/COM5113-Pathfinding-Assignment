@@ -36,6 +36,15 @@ namespace Assignment__fixed
         {
             _head = null;
         }
+        public IEnumerable<T> Enumerate()
+        {
+            Element? current = _head;
+            while (current != null)
+            {
+                yield return current.Data;
+                current = current.Next;
+            }
+        }
 
         // IsEmpty - returns true only when the list is empty
         public bool IsEmpty()
@@ -55,6 +64,7 @@ namespace Assignment__fixed
             // make the new element the head of the list
             _head = newElement;
         }
+
 
         public void PushBack(T data)
         {
