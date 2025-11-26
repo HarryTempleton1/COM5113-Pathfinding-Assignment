@@ -14,36 +14,52 @@ namespace Assignment__fixed
         {
             //initialises grid and values on grid
             const int dim = 12;
-            string[,] grid = new string[dim, dim];
             const int mid = dim / 2;
             bool gameOver = false;
             int moves = 0;
-            for (int i = 0; i < dim; i++)
-            {
-                for (int j = 0; j < dim; j++)
-                {
-                    grid[i, j] = "1";
-                }
-            }
+            Coordinate exit = new Coordinate(0, 0);
+            int rows = 12;
+            int cols = 12;
+            string[,] grid = new string[rows, cols];
+
             //creates coordinate history linked list to store previous player positions for undo function
             var history = new LinkedList<Coordinate>();
             //stores the path for searches
             LinkedList<Coordinate> path = new LinkedList<Coordinate>();
 
-            //creates obstacles at random points on the grid
-            Random rnd = new Random();
-            for (int j = 0; j < 20; j++)
-            {
-                grid[rnd.Next(dim), rnd.Next(dim)] = "0";
-            }
-            //creates player and exit on grid
-            grid[rnd.Next(dim), rnd.Next(dim)] = "E";
-            grid[mid, mid] = "P";
-
-            
             Coordinate player = new Coordinate(mid, mid);
-            draw(grid, dim);
-            //BreadthFirstSearch.BFS(grid, dim, player);
+
+            Console.WriteLine("A = Load Map... B = Generate Random 12x12 map");
+            var inp = Console.ReadKey();
+            if (inp.Key == ConsoleKey.B)
+            {
+                for (int i = 0; i < dim; i++)
+                {
+                    for (int j = 0; j < dim; j++)
+                    {
+                        grid[i, j] = "1";
+                    }
+                }
+
+                //creates obstacles at random points on the grid
+                Random rnd = new Random();
+                for (int j = 0; j < 20; j++)
+                {
+                    grid[rnd.Next(dim), rnd.Next(dim)] = "0";
+                }
+                //creates player and exit on grid
+                grid[rnd.Next(dim), rnd.Next(dim)] = "E";
+                grid[mid, mid] = "P";
+                player = new Coordinate(mid, mid);
+            }
+            if (inp.Key == ConsoleKey.A)
+            {
+                Console.Write("Enter map name:");
+                string mapName = Console.ReadLine();
+                string projectPath = @"C:\Users\harry\source\repos\Assignment (fixed\Assignment (fixed";
+                string filePath = Path.Combine(projectPath, mapName + ".txt");
+                LoadMap(filePath, ref grid, ref rows, ref cols, ref player, ref exit);
+            }
 
             //main game loop
             while (!gameOver)
@@ -52,12 +68,12 @@ namespace Assignment__fixed
                 Console.Clear();
                 Console.WriteLine("Press Q to quit, Backspace to undo, P to BFS, O to DFS and WASD to move");
                 Console.WriteLine("Player Moves: " + moves);
-                draw(grid, dim);
+                draw(grid, rows, cols);
 
                 //gets players current location from the grid (in case it changed externally)
-                for (int i = 0; i < dim; i++)
+                for (int i = 0; i < rows; i++)
                 {
-                    for (int j = 0; j < dim; j++)
+                    for (int j = 0; j < cols; j++)
                     {
                         if (grid[i, j] == "P")
                         {
@@ -67,14 +83,14 @@ namespace Assignment__fixed
                 }
 
                 //gets user input and determines what should happen
-                var inp1 = Console.ReadKey();
-                if (inp1.Key == ConsoleKey.Q)
+                var inp2 = Console.ReadKey();
+                if (inp2.Key == ConsoleKey.Q)
                 {
                     gameOver = true;
                     continue;
                 }
                 //undo moves
-                if (inp1.Key == ConsoleKey.Backspace)
+                if (inp2.Key == ConsoleKey.Backspace)
                 {
                     Coordinate last = default;
                     //checks if there is a previous move to undo
@@ -91,14 +107,14 @@ namespace Assignment__fixed
                         moves++;
                     }
                 }
-                if (inp1.Key == ConsoleKey.P)
+                if (inp2.Key == ConsoleKey.P)
                 {
                     SearchNode playerNode = new SearchNode(player);
                     BreadthFirstSearch.BFS(grid, dim, playerNode, ref path);
                     Console.WriteLine("Press any key to continue");
                     Console.ReadKey();
                 }
-                if (inp1.Key == ConsoleKey.O)
+                if (inp2.Key == ConsoleKey.O)
                 {
                     SearchNode playerNode = new SearchNode(player);
                     DepthFirstSearch.DFS(grid, dim, playerNode, ref path);
@@ -111,10 +127,10 @@ namespace Assignment__fixed
                 int newCol = player.Col;
 
                 //creates the value for the new potential move
-                if (inp1.Key == ConsoleKey.W) newRow--;
-                if (inp1.Key == ConsoleKey.S) newRow++;
-                if (inp1.Key == ConsoleKey.A) newCol--;
-                if (inp1.Key == ConsoleKey.D) newCol++;
+                if (inp2.Key == ConsoleKey.W) newRow--;
+                if (inp2.Key == ConsoleKey.S) newRow++;
+                if (inp2.Key == ConsoleKey.A) newCol--;
+                if (inp2.Key == ConsoleKey.D) newCol++;
 
                 //checks if new move is within the grid bounds
                 if (newRow >= 0 && newRow < dim && newCol >= 0 && newCol < dim)
@@ -129,7 +145,7 @@ namespace Assignment__fixed
                         continue;
                     }
                     //checks that move isnt an obstacle or already visited
-                    if (grid[newRow, newCol] != "0" && grid[newRow, newCol] != "*")
+                    if (newRow >= 0 && newRow < dim && newCol >= 0 && newCol < dim)
                     {
                         //save current position
                         history.PushFront(player);
@@ -146,17 +162,56 @@ namespace Assignment__fixed
         }
 
         //method to display grid 
-        static void draw(string[,] grid, int dim)
+        static void draw(string[,] grid, int rows, int cols)
         {
-            for (int i = 0; i < dim; i++)
+            for (int i = 0; i < rows; i++)
             {
-                for (int j = 0; j < dim; j++)
+                for (int j = 0; j < cols; j++)
                 {
                     Console.Write(grid[i, j]);
                 }
                 Console.WriteLine();
             }
         }
+
+        static bool LoadMap(string filePath,ref string[,] grid,ref int rows,ref int cols,ref Coordinate start,ref Coordinate exit)
+        {
+            try
+            {
+                string[] lines = File.ReadAllLines(filePath);
+
+                string[] dim = lines[0].Split(' ');
+                rows = int.Parse(dim[0]);
+                cols = int.Parse(dim[1]);
+
+                string[] startPos = lines[1].Split(' ');
+                start = new Coordinate(int.Parse(startPos[0]), int.Parse(startPos[1]));
+
+                string[] goalPos = lines[2].Split(' ');
+                exit = new Coordinate(int.Parse(goalPos[0]), int.Parse(goalPos[1]));
+
+                grid = new string[rows, cols];
+
+                for (int r = 0; r < rows; r++)
+                {
+                    string[] rowValues = lines[3 + r].Split(' ');
+                    for (int c = 0; c < cols; c++)
+                    {
+                        grid[r, c] = rowValues[c];
+                    }
+                }
+
+                // place start and goal
+                grid[start.Row, start.Col] = "P";
+                grid[exit.Row, exit.Col] = "E";
+
+                return true;
+            }
+            catch
+            {
+                Console.WriteLine("Error loading map file!");
+                return false;
+            }
+        }
     }
 }
-
