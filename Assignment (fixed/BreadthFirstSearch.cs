@@ -1,11 +1,12 @@
-﻿using System;
+﻿using Assignment__fixed;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Runtime.Remoting.Metadata.W3cXsd2001;
 using System.Text;
 using System.Threading.Tasks;
-using Assignment__fixed;
 
 namespace Assignment__fixed
 {
@@ -60,48 +61,10 @@ namespace Assignment__fixed
                         new Coordinate(nr, nc),
                         pred: current
                     );
-
+                    //queues found neighbours
                     openList.Enqueue(next);
                 }
                 closedList.PushBack(current);
-
-                ////creates new collummn and row variables to check cardinal directions for new coords to move
-                ////checks north
-                //int nr = current.Position.Row - 1;
-                //int nc = current.Position.Col;
-
-                ////checks if new move is valid or already discovered (on closed list)
-                //if(nr>= 0 && grid[nr,nc] != "0" && !closedList.Contains(new Coordinate(nr, nc)))
-                //{
-                //    //queues valid move onto the open list 
-                //    openList.Enqueue(new Coordinate(nr,nc));
-                //}
-
-                ////checks east
-                //nr = current.Position.Row;
-                //nc = current.Position.Col + 1;
-                //if (nc < dim && grid[nr, nc] != "0" && !closedList.Contains(new Coordinate(nr, nc)))
-                //{
-                //    openList.Enqueue(new Coordinate(nr, nc));
-                //}
-
-                ////checks south
-                //nr = current.Position.Row + 1;
-                //nc = current.Position.Col;
-                //if (nr < dim  && grid[nr, nc] != "0" && !closedList.Contains(new Coordinate(nr, nc)))
-                //{
-                //    openList.Enqueue(new Coordinate(nr, nc));
-                //}
-
-                ////checks west
-                //nr = current.Position.Row;
-                //nc = current.Position.Col - 1;
-                //if (nc >= 0 && grid[nr, nc] != "0" && !closedList.Contains(new Coordinate(nr, nc)))
-                //{
-                //    openList.Enqueue(new Coordinate(nr, nc));
-                //}
-                //marks current node as visited
-
             }
             Console.WriteLine(current);
             Console.WriteLine($"exit found at:  {current.Position.getCoordinate()}");
@@ -111,6 +74,20 @@ namespace Assignment__fixed
             {
                 Console.WriteLine(coord.getCoordinate());
             }
+
+            //writes path to txt file
+            string projectPath = @"C:\Users\harry\source\repos\Assignment (fixed\Assignment (fixed\paths";
+
+            string filePath = Path.Combine(projectPath, "BFS.txt");
+
+            StringBuilder sb = new StringBuilder();
+            foreach (var coord in path.Enumerate())
+            {
+                sb.AppendLine(coord.getCoordinate());
+            }
+
+            File.WriteAllText(filePath, sb.ToString());
+            Console.WriteLine("path saved to", filePath);
         }
     }
 }

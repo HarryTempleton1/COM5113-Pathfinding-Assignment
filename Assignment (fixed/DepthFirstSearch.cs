@@ -67,6 +67,19 @@ namespace Assignment__fixed
             {
                 Console.WriteLine(coord.getCoordinate());
             }
+
+            string projectPath = @"C:\Users\harry\source\repos\Assignment (fixed\Assignment (fixed\paths";
+
+            string filePath = Path.Combine(projectPath, "DFS.txt");
+
+            StringBuilder sb = new StringBuilder();
+            foreach (var coord in path.Enumerate())
+            {
+                sb.AppendLine(coord.getCoordinate());
+            }
+
+            File.WriteAllText(filePath, sb.ToString());
+            Console.WriteLine("path saved to", filePath);
         }
     }
 }

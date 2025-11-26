@@ -29,6 +29,7 @@ namespace Assignment__fixed
 
             Coordinate player = new Coordinate(mid, mid);
 
+            //user can choose to load or generate random map
             Console.WriteLine("A = Load Map... B = Generate Random 12x12 map");
             var inp = Console.ReadKey();
             if (inp.Key == ConsoleKey.B)
@@ -54,9 +55,10 @@ namespace Assignment__fixed
             }
             if (inp.Key == ConsoleKey.A)
             {
+                //takes map name and creates variable for the file path used later to load map
                 Console.Write("Enter map name:");
                 string mapName = Console.ReadLine();
-                string projectPath = @"C:\Users\harry\source\repos\Assignment (fixed\Assignment (fixed";
+                string projectPath = @"C:\Users\harry\source\repos\Assignment (fixed\Assignment (fixed\maps";
                 string filePath = Path.Combine(projectPath, mapName + ".txt");
                 LoadMap(filePath, ref grid, ref rows, ref cols, ref player, ref exit);
             }
@@ -109,6 +111,7 @@ namespace Assignment__fixed
                 }
                 if (inp2.Key == ConsoleKey.P)
                 {
+                    //creates a search node for player so it can be passed to BFS algo
                     SearchNode playerNode = new SearchNode(player);
                     BreadthFirstSearch.BFS(grid, dim, playerNode, ref path);
                     Console.WriteLine("Press any key to continue");
@@ -173,25 +176,29 @@ namespace Assignment__fixed
                 Console.WriteLine();
             }
         }
-
+        //method to load map
         static bool LoadMap(string filePath,ref string[,] grid,ref int rows,ref int cols,ref Coordinate start,ref Coordinate exit)
         {
+            //try catch to inform user if there was an error loading map
             try
             {
+                //reads entire text file and puts it into an array of strings by line. lines[0] = 1st line of txt file
                 string[] lines = File.ReadAllLines(filePath);
-
+                //gets grid size
                 string[] dim = lines[0].Split(' ');
                 rows = int.Parse(dim[0]);
                 cols = int.Parse(dim[1]);
 
+                //gets start and exit pos
                 string[] startPos = lines[1].Split(' ');
                 start = new Coordinate(int.Parse(startPos[0]), int.Parse(startPos[1]));
 
                 string[] goalPos = lines[2].Split(' ');
                 exit = new Coordinate(int.Parse(goalPos[0]), int.Parse(goalPos[1]));
 
+                //2D array to store map
                 grid = new string[rows, cols];
-
+                //reads and assigns actual grid layout
                 for (int r = 0; r < rows; r++)
                 {
                     string[] rowValues = lines[3 + r].Split(' ');
