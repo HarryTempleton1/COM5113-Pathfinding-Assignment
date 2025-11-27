@@ -8,14 +8,6 @@ using System.Xml.Linq;
 
 namespace Assignment__fixed
 {
-    //public class PathNode
-    //{
-    //    private Coordinate _location;
-    //    private int _cost = 0; //heuristics
-    //    private int _score = 0; //terrain
-    //    private PathNode? _predecessor = null;
-    //}
-
     public class SearchNode
     {
         public Coordinate Position { get; }
@@ -54,12 +46,7 @@ namespace Assignment__fixed
             return path;
         }
 
-        public static int ManhattanDistance(Coordinate current, Coordinate goal)
-        {
-            // TODO: This would be a good place to put your heuristic function
-
-            return 0;
-        }
+        
         public static bool ContainsNodeWithCoordinate(this LinkedList<SearchNode> list, int row, int col)
         {
             foreach (var node in list.Enumerate())
@@ -68,6 +55,13 @@ namespace Assignment__fixed
                     return true;
             }
             return false;
+        }
+
+        public static int ManhattanDistance(Coordinate current, Coordinate goal)
+        {
+            // TODO: This would be a good place to put your heuristic function
+
+            return 0;
         }
 
         //public static void CheckRules(SearchNode current, LinkedQueue<SearchNode> openList, LinkedQueue<SearchNode> closedList, int dim, string[] grid)

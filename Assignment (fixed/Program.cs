@@ -68,7 +68,7 @@ namespace Assignment__fixed
             {
                 //displays grid and instructions
                 Console.Clear();
-                Console.WriteLine("Press Q to quit, Backspace to undo, P to BFS, O to DFS and WASD to move");
+                Console.WriteLine("Press Q to quit, Backspace to undo, P to BFS, O to DFS, I to HillClimbSearch and WASD to move");
                 Console.WriteLine("Player Moves: " + moves);
                 draw(grid, rows, cols);
 
@@ -121,6 +121,13 @@ namespace Assignment__fixed
                 {
                     SearchNode playerNode = new SearchNode(player);
                     DepthFirstSearch.DFS(grid, dim, playerNode, ref path);
+                    Console.WriteLine("Press any key to continue");
+                    Console.ReadKey();
+                }
+                if (inp2.Key == ConsoleKey.I)
+                {
+                    SearchNode playerNode = new SearchNode(player);
+                    HillClimbSearch.HCS(grid, dim, playerNode, ref path);
                     Console.WriteLine("Press any key to continue");
                     Console.ReadKey();
                 }

@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BreadthFirstSearch.cs" />
+    <Compile Include="HillclimbSearch.cs" />
     <Compile Include="DepthFirstSearch.cs" />
     <Compile Include="Coordinate.cs" />
     <Compile Include="IStack.cs" />

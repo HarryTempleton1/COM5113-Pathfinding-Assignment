@@ -10,29 +10,8 @@ namespace Assignment__fixed
     // TODO: Make the enum match the algorithms you've implemented
     enum Algorithm { BFS, DFS, /*HillClimbing /BestFirst, Dijkstras, AStar*/}
 
-    internal class PathFinderFactory
+    public static class PathFinderFactory
     {
-        // Static factory method - can be called when no object is instantiated
-        // Implements Polymorphism:
-        // returns reference of base class type, but actual object is of derived type
-        //public static PathFinderInterface NewPathFinder(Algorithm algorithm)
-        //{
-        //    PathFinderInterface pathFinder; // variable type references the INTERFACE (abstract base)
-        //    switch (algorithm)
-        //    {
-        //        case Algorithm.DFS:
-        //            // TODO: Implement a Depth First class, and instantiate it here!
-        //            break;
-        //        case Algorithm.BFS:
-
-        //            break;
-
-        //        // TODO: Add more cases the more algorithms you implement
-        //        default:
-        //            pathFinder = new BreadthFirst();
-        //            break;
-        //    }
-        //    return pathFinder;
-        //}
+        
     }
 }

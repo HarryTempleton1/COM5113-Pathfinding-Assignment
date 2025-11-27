@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Assignment__fixed
 {
-    internal class DepthFirstSearch
+    internal class DepthFirstSearch 
     {
         public static void DFS(string[,] grid, int dim, SearchNode player, ref LinkedList<Coordinate> path)
         {
